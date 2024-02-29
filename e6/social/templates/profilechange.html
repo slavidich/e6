@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="profilecontainer">
+    <div class="profilediv">
+        <div class="usernamediv">
+            <p>{{user.username}}</p>
+        </div>
+        <div class="useravatar">
+            {%if user.profile.avatar%}
+            <img class="defaultavatarprofile" src="{{user.profile.avatar.url}}">
+            {% else %}
+            <img class="defaultavatarprofile" src="{% static 'social/images/base.png' %}">
+            {% endif %}
+        </div>
+        <form  method="post" enctype="multipart/form-data">
+            {% csrf_token%}
+            {{form.as_p}}
+            <button class="" type="submit">Сохранить</button>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

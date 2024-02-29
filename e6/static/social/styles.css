@@ -1,0 +1,193 @@
+body{
+    background-color: #194D3C;
+    margin:0px;
+}
+p {
+    color: white;
+}
+a {
+    color:white;
+}
+
+.nav {
+    display:flex;
+    background-color: #143D31;
+    margin:0px;
+    justify-content: space-between;
+}
+.nav p {
+    font-size:20px
+}
+.navleft {
+    margin-left:30px;
+    display:flex;
+}
+.navleft p{
+    margin-right:10px;
+}
+.navleft a{
+    text-decoration:none;
+}
+.navright{
+    margin-right:30px;
+}
+.defaultavatarprofile{
+    width: 250px;
+    height: 250px;
+    border-radius: 35%;
+}
+.profilecontainer{
+    display:flex;
+    justify-content: center;
+}
+
+.profilediv{
+    width:25%;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.usernamediv {
+    display: flex;
+    justify-content: center;
+}
+
+.usernamediv p {
+    font-size: 200%;
+}
+
+.useravatar {
+    display: flex;
+    justify-content: center;
+}
+
+.userbio {
+    text-align: center;
+    padding:10px;
+    width:100%;
+    margin-top: 25px;
+    border-radius: 10px;
+    background-color: #143D31;
+    display: flex;
+    justify-content: center;
+}
+
+.buttonprofile{
+    margin-top:10px;
+    border-radius: 10px;
+    padding:10px;
+    font-size:20px;
+    text-decoration:none;
+    border: 1px solid #000000;
+    border-color:black;
+    background-color: #25795f;
+}
+
+.userlistcontainer{
+    display:flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    height:90%;
+}
+.userlistdiv {
+    display:flex;
+    justify-content: flex-start;
+    width: 40%;
+
+    flex-direction: column;
+
+}
+.userdiv {
+    background-color: #25795f;
+    border-radius: 10px;
+    margin:10px 25px 20px;
+    display:flex;
+    justify-content: space-between;
+    min-width:400px;
+    height: 65px;
+}
+.userdiv p {
+    font-size: 25px;
+    margin: 0px 0px 0px -10px;
+}
+.userdivimgandname{
+    display:flex;
+    margin-left:15px;
+}
+.userdivimg {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    width:75px;
+    margin-left:10px;
+    position: relative;
+}
+.userdivimg img{
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
+    border: solid 2px black;
+    overflow: hidden;
+    background-size: 100% 100%;
+}
+.userdivname{
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.userdivname p{
+    padding-bottom:4px;
+}
+.userdivsendmsg{
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-right:25px;
+}
+.userdivsendmsg a {
+    border: solid 2px #080908;
+    border-radius: 4px;
+    background-color: #196b50;
+    padding: 2px 5px  2px 5px;
+    text-decoration:none;
+}
+.searchuser {
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.searchuser form{
+    width: 70%;
+    display:flex;
+    justify-content: space-between;
+}
+.searchuser form input{
+    width: 300px;
+}
+.searchuser form label{
+    color: white;
+}
+.userlistpagin{
+    width:50%;
+    display:flex;
+    justify-content: center;
+}
+.activepaginator{
+    border: solid 1px black;
+    padding: 5px 10px 5px 10px;
+    background-color: #39b98f;
+    text-decoration: none;
+}
+.inactivepaginator{
+    border: solid 1px black;
+    padding: 5px 10px 5px 10px;
+    background-color:#25795FFF;
+    text-decoration: none;
+}
+

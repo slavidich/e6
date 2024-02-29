@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="userlistcontainer">
+    <div class="searchuser">
+        <form>
+            <label>Поиск</label>
+            <input name="username" placeholder="username" {% if usernamesearch %} value="{{usernamesearch}}" {% endif %}>
+            <button type="submit">Искать</button>
+        </form>
+    </div>
+    <div class="userlistdiv">
+
+        {% for userprofile in users%}
+        <div class="userdiv">
+            <div class="userdivimgandname">
+                <div class="userdivimg">
+                    {% if userprofile.profile.avatar%}
+                        <img  src="{{ userprofile.profile.avatar.url}}">
+                    {% else %}
+                        <img  src="{% static 'social/images/base.png'%}">
+                    {% endif %}
+                </div>
+                <div class="userdivname">
+                    <p>{{ userprofile.username }}</p>
+                </div>
+            </div>
+            {% if user != userprofile %}
+            <div class="userdivsendmsg">
+                <a href="#">
+                    Начать диалог
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% if not usernamesearch and pagelist%}
+        <div class="userlistpagin">
+            {% for p in pagelist %}
+                {% if currentpage == p %}
+                    <a class="activepaginator" href="#">{{p}}</a>
+                {% else %}
+                    {% if p == "…" %}
+                        <a class="inactivepaginator" href="#">{{p}}</a>
+                    {% else %}
+                        <a class="inactivepaginator" href="?page={{p}}">{{p}}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

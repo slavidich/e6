@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="profilecontainer">
+    <div class="profilediv">
+        <div class="usernamediv">
+            <p>{{profileuser.username}}</p>
+        </div>
+        <div class="useravatar">
+            {%if profileuser.profile.avatar%}
+            <img class="defaultavatarprofile" src="{{profileuser.profile.avatar.url}}">
+            {% else %}
+            <img class="defaultavatarprofile" src="{% static 'social/images/base.png' %}">
+            {% endif %}
+        </div>
+        <div class="userbio">
+            {% if profileuser.profile.bio %}
+                <p>О себе: {{profileuser.profile.bio}}</p>
+            {% else %}
+                <p>О себе: К сожалению пользователь еще не запомнил данный раздел</p>
+            {% endif %}
+        </div>
+        {% if profileuser == user%}
+            <a class="buttonprofile" href="{%url 'profilechange'%}">Изменить</a>
+        {% else %}
+            <a class="buttonprofile" href="#">Написать</a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% load static %}
+<html>
+<head>
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="{%static 'social/styles.css'%}">
+</head>
+
+<body>
+<div class="nav">
+    <div class="navleft">
+        <p>Чат</p>
+        <p><a href="{%url 'accounts'%}">Пользователи</a></p>
+    </div>
+    <div class="navright">
+        {% if user.is_authenticated  %}
+            <p>Привет, <a href="{%url 'profile' user.username%}">{{user}}</a></p>
+        {% else %}
+            <p><a href="{% url 'account_login'%}">Войти</a></p>
+        {% endif %}
+    </div>
+</div>
+{% block content %}
+
+{% endblock %}
+
+</body>
+
+</html>
