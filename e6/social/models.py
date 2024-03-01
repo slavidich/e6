@@ -14,3 +14,28 @@ class Profile(models.Model):
             image = Image.open(self.avatar.path)
             image.thumbnail(SIZE, Image.LANCZOS)
             image.save(self.avatar.path)
+    def __str__(self):
+        return f'Профиль {self.user.username}'
+
+class Room(models.Model):
+    ischat = models.BooleanField(default=True)
+    members = models.ManyToManyField(User, through='ChatMessages')
+    roomname = models.CharField(max_length=50, null=True)
+    def __str__(self):
+        if self.ischat:
+            return f'Чат между {self.members.all()}'
+        else:
+            return f'Групповой чат {self.roomname}'
+
+class Message(models.Model):
+    text = models.TextField()
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('time',)
+
+class ChatMessages(models.Model):
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    member = models.ForeignKey(User, on_delete=models.CASCADE)

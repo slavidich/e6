@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="chatcontainer">
+    <div class="listmsgs">
+
+    </div>
+    <div class="sendmsgdiv">
+        <form method="post">
+            {% csrf_token  %}
+            <input name="textmsg">
+            <button type="submit">Отправить</button>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

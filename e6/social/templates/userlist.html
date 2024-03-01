@@ -18,19 +18,19 @@
             <div class="userdivimgandname">
                 <div class="userdivimg">
                     {% if userprofile.profile.avatar%}
-                        <img  src="{{ userprofile.profile.avatar.url}}">
+                        <a href="{% url 'profile' userprofile.username%}"><img  src="{{ userprofile.profile.avatar.url}}"></a>
                     {% else %}
-                        <img  src="{% static 'social/images/base.png'%}">
+                        <a href="{% url 'profile' userprofile.username%}"><img  src="{% static 'social/images/base.png'%}"></a>
                     {% endif %}
                 </div>
                 <div class="userdivname">
-                    <p>{{ userprofile.username }}</p>
+                    <a href="{% url 'profile' userprofile.username%}">{{ userprofile.username }}</a>
                 </div>
             </div>
             {% if user != userprofile %}
             <div class="userdivsendmsg">
-                <a href="#">
-                    Начать диалог
+                <a href="{% url 'usertouserchat' userprofile.username %}">
+                    Открыть чат
                 </a>
             </div>
             {% endif %}

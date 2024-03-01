@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
-from .models import Profile
+from .models import Profile, ChatMessages, Room, Message
 from .forms import ChangeProfile
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 
 # Create your views here.
@@ -46,3 +47,27 @@ def userlist(request):
         'currentpage': currentpage,
     }
     return render(request, 'userlist.html', context)
+
+def chatlist (request):
+
+    context = {
+        'title':'Ваши чаты'
+    }
+    return render(request, 'chats.html', context)
+def usertouserchat(request, username):
+    chat = Room.objects.filter(ischat=True, members=request.user).filter(members=User.objects.get(username=username))
+    if len(chat) > 1:
+        raise Exception('Чатов найдено больше 1 ')
+    if not chat:
+        chat = Room.objects.create(ischat=True).members.add(request.user, User.objects.get(username=username))
+
+    if request.method=='POST':
+        Message.objects.create(room=chat[0], sender=request.user, text=request.POST.get('textmsg'))
+
+
+
+    context = {
+        'title': f'Чат с {username}',
+
+    }
+    return render(request, 'chat.html', context)

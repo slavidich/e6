@@ -139,8 +139,10 @@ a {
     justify-content: center;
     flex-direction: column;
 }
-.userdivname p{
+.userdivname a{
     padding-bottom:4px;
+    font-size: 25px;
+    text-decoration: none;
 }
 .userdivsendmsg{
     display:flex;
@@ -190,4 +192,21 @@ a {
     background-color:#25795FFF;
     text-decoration: none;
 }
-
+.chatcontainer{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    height: 90%;
+}
+.listmsgs {
+    width: 35%;
+    height: 75%;
+    border: solid 1px
+}
+.sendmsgdiv {
+    width: 35%;
+    margin-top:10px;
+    display:flex;
+    justify-content: center;
+}
