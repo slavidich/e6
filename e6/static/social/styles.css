@@ -198,15 +198,35 @@ a {
     justify-content: flex-start;
     flex-direction: column;
     height: 90%;
+
 }
 .listmsgs {
     width: 35%;
     height: 75%;
-    border: solid 1px
+    border: solid 1px;
+    overflow-y: auto
+
 }
 .sendmsgdiv {
     width: 35%;
     margin-top:10px;
     display:flex;
     justify-content: center;
+}
+.divmessage{
+    display: flex;
+    justify-content: space-between;
+}
+.messagetime{
+    width:25%;
+}
+.messagetime p{
+    margin: 3px 0px 3px 0px;
+    text-align: right;
+}
+.messagetext{
+    width:75%;
+}
+.messagetext p{
+    margin: 3px 0px 3px 0px;
 }

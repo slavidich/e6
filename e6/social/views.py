@@ -3,8 +3,11 @@ from .models import Profile, ChatMessages, Room, Message
 from .forms import ChangeProfile
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
-from django.db.models import Q
 
+from django.shortcuts import render
+from rest_framework import viewsets
+from rest_framework import permissions
+from .serializers import *
 
 # Create your views here.
 def profileview(request, username):
@@ -62,12 +65,19 @@ def usertouserchat(request, username):
         chat = Room.objects.create(ischat=True).members.add(request.user, User.objects.get(username=username))
 
     if request.method=='POST':
-        Message.objects.create(room=chat[0], sender=request.user, text=request.POST.get('textmsg'))
+        text =  request.POST.get('textmsg')
+        if text:
+            Message.objects.create(room=chat[0], sender=request.user, text=text)
 
+    messages = Message.objects.filter(room=chat[0])
 
 
     context = {
         'title': f'Чат с {username}',
-
+        'messages': messages,
     }
     return render(request, 'chat.html', context)
+
+class MessageViewSet(viewsets.ModelViewSet):
+   queryset = Message.objects.all()
+   serializer_class = MessageSerializer

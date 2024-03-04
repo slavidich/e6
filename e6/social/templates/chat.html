@@ -4,16 +4,48 @@
 {% block content %}
 <div class="chatcontainer">
     <div class="listmsgs">
+        {% for message in messages %}
+            <div class="divmessage">
+                <div class="messagetext">
+                    <p><b>{{message.sender}}</b>: {{message.text}}</p>
+                </div>
+                <div class="messagetime">
+                    <p>{{message.time|date:"d.m.y G:i" }}</p>
+                </div>
 
+            </div>
+        {% endfor %}
     </div>
     <div class="sendmsgdiv">
-        <form method="post">
+        <form method="" onsubmit="return false;">
             {% csrf_token  %}
             <input name="textmsg">
-            <button type="submit">Отправить</button>
+            <button id="btn" type="submit">Отправить</button>
         </form>
     </div>
 
 </div>
+<script>
+    function addmsg(text, sender, time){
+        let msgdiv =  document.createElement('div')
+        msgdiv.classList.add('divmessage')
+        msgdiv.innerHTML = `<div class="messagetext"><p><b>${sender}</b>: ${text}</p></div>
+                            <div class="messagetime"><p>${time}</p></div></div>`
+        let messages = document.querySelectorAll('.divmessage')
+        let lastdivmsg = messages[messages.length-1]
+        lastdivmsg.after(msgdiv)
+    }
+
+    function scrolldown(){
+        let listmsg = document.querySelector('.listmsgs')
+        listmsg.scrollTop=9999
+    }
+
+    btn.addEventListener("click", ()=>{
+        addmsg('test', 'slava', '0')
+        scrolldown()
+    });
+
+</script>
 
 {% endblock %}
