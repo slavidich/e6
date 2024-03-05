@@ -14,6 +14,7 @@
     <div class="navright">
         {% if user.is_authenticated  %}
             <p>Привет, <a href="{%url 'profile' user.username%}">{{user}}</a></p>
+            <input hidden="hidden" value="{{ user }}" id="username">
         {% else %}
             <p><a href="{% url 'account_login'%}">Войти</a></p>
         {% endif %}
