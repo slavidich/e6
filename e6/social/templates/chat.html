@@ -40,9 +40,24 @@
         let listmsg = document.querySelector('.listmsgs')
         listmsg.scrollTop=9999
     }
+    async function postMsg(txt){
+        let msgdata = {
+            'text':txt
+        }
+        let response = await fetch('http://127.0.0.1:8000/api/messages', {
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json;charset=utf-8',
+                'CSRF': "{{ csrf_token }}"
+            },
+            body: JSON.stringify(msgdata)
+        })
+        return response.json()
+    }
 
     btn.addEventListener("click", ()=>{
         addmsg('test', 'slava', '0')
+        postMsg('123321test321123')
         scrolldown()
     });
 
