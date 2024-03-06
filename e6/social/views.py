@@ -58,9 +58,7 @@ def chatlist (request):
     }
     return render(request, 'chats.html', context)
 def usertouserchat(request, username):
-    chat = Room.objects.filter(ischat=True, members=request.user).filter(members=User.objects.get(username=username))
-    if len(chat) > 1:
-        raise Exception('Чатов найдено больше 1 ')
+    chat = Room.objects.filter(ischat=True, members=request.user).filter(members=User.objects.get(username=username)).first()
     if not chat:
         chat = Room.objects.create(ischat=True).members.add(request.user, User.objects.get(username=username))
 
@@ -69,7 +67,7 @@ def usertouserchat(request, username):
         if text:
             Message.objects.create(room=chat[0], sender=request.user, text=text)
 
-    messages = Message.objects.filter(room=chat[0])
+    messages = Message.objects.filter(room=chat)
 
 
     context = {

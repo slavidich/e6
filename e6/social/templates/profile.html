@@ -23,7 +23,7 @@
         {% if profileuser == user%}
             <a class="buttonprofile" href="{%url 'profilechange'%}">Изменить</a>
         {% else %}
-            <a class="buttonprofile" href="#">Написать</a>
+            <a class="buttonprofile" href="{% url 'usertouserchat' profileuser.username%}">Написать</a>
         {% endif %}
     </div>
 </div>

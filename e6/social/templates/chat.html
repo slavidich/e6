@@ -10,7 +10,7 @@
                     <p><b>{{message.sender}}</b>: {{message.text}}</p>
                 </div>
                 <div class="messagetime">
-                    <p>{{message.time|date:"d.m.y G:i" }}</p>
+                    <p>{{message.time|date:"d.m.y H:i" }}</p>
                 </div>
 
             </div>
@@ -26,42 +26,66 @@
 
 </div>
 <script>
-    function addmsg(text, sender, time){
+    function addmsg(text, sender, date=new Date()){
+        let time = formatDate(date)
         let msgdiv =  document.createElement('div')
         msgdiv.classList.add('divmessage')
         msgdiv.innerHTML = `<div class="messagetext"><p><b>${sender}</b>: ${text}</p></div>
                             <div class="messagetime"><p>${time}</p></div></div>`
-        let messages = document.querySelectorAll('.divmessage')
-        let lastdivmsg = messages[messages.length-1]
-        lastdivmsg.after(msgdiv)
+        let listmsgs = document.querySelector('.listmsgs')
+        listmsgs.append(msgdiv)
     }
 
     function scrolldown(){
         let listmsg = document.querySelector('.listmsgs')
-        listmsg.scrollTop=9999
+        listmsg.scrollTo(0, listmsg.scrollHeight)
     }
-    async function postMsg(txt){
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+    async function postMsg(txt, usernamerec){
         let msgdata = {
-            'text':txt
+            'text':txt,
+            'usernamerec': usernamerec
         }
+        const csrftoken = getCookie('csrftoken');
         let response = await fetch('http://127.0.0.1:8000/api/messages', {
             method:'POST',
             headers:{
                 'Content-Type': 'application/json;charset=utf-8',
-                'X-CSRFToken': "{{ csrf_token }}"
+                'X-CSRFToken': csrftoken
             },
             body: JSON.stringify(msgdata)
         })
         return response.json()
     }
 
+    function formatDate(date){
+        let day = date.getDate()
+        day = day.toString().length <2? '0'+day: day
+        let month = date.getMonth() +1
+        month = month.toString().length<2? '0'+month: month
+        let year = date.getFullYear()
+        year = year.toString().slice(2,4)
+        let hours = date.getHours()
+        hours = hours.toString().length<2? '0'+hours: hours
+        let min = date.getMinutes()
+        min = min.toString().length<2? '0'+min: min
+        return (`${day}.${month}.${year} ${hours}:${min}`)
+    }
     btn.addEventListener("click", ()=>{
-        addmsg(document.getElementById("msgtxt").value, document.getElementById('username').value, Date.now())
-        postMsg(document.getElementById('msgtxt').value)
+        addmsg(document.getElementById("msgtxt").value, document.getElementById('username').value)
+        let arrpath = window.location.pathname.split('/')
+        usernamerec = arrpath[arrpath.length-1]
+        postMsg(document.getElementById('msgtxt').value, usernamerec)
         document.getElementById('msgtxt').value = ""
         scrolldown()
     });
-
+    window.onload = ()=>{
+        scrolldown()
+    }
 </script>
 
 {% endblock %}
