@@ -31,6 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
+    "channels",
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,7 +49,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
-    "channels"
+
+
 ]
 
 MIDDLEWARE = [
@@ -59,7 +63,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'allauth.account.middleware.AccountMiddleware',
-    'social.middlewares.TimezoneMiddleware'
+    'social.middlewares.TimezoneMiddleware' # чтобы в чате правильно время показывало
 ]
 
 ROOT_URLCONF = 'e6.urls'
@@ -82,8 +86,17 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'e6.wsgi.application'
-
+#WSGI_APPLICATION = 'e6.wsgi.application'
+# CHANNELS
+ASGI_APPLICATION = "e6.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
