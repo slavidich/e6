@@ -73,6 +73,7 @@ def usertouserchat(request, username):
     context = {
         'title': f'Чат с {username}',
         'messages': messages,
+        'chat_id': chat.id,
     }
     return render(request, 'chat.html', context)
 

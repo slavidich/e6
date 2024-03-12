@@ -75,11 +75,21 @@
         min = min.toString().length<2? '0'+min: min
         return (`${day}.${month}.${year} ${hours}:${min}`)
     }
+    ws = new WebSocket('ws://127.0.0.1:8000/ws/chat/{{chat_id}}/')
+    ws.onmessage = (event) => {
+        const data = JSON.parse(event.data)
+        if (document.getElementById('username').value!=data['message']['sender']){
+            console.log(data)
+            addmsg(data['message']['text'], data['message']['sender'], data['message']['time'])
+        }
+    }
+
     btn.addEventListener("click", ()=>{
         addmsg(document.getElementById("msgtxt").value, document.getElementById('username').value)
         let arrpath = window.location.pathname.split('/')
         usernamerec = arrpath[arrpath.length-1]
-        postMsg(document.getElementById('msgtxt').value, usernamerec)
+        //postMsg(document.getElementById('msgtxt').value, usernamerec)
+        ws.send(JSON.stringify({'message':document.getElementById('msgtxt').value}))
         document.getElementById('msgtxt').value = ""
         scrolldown()
     });
