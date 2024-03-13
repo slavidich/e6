@@ -19,7 +19,7 @@
     <div class="sendmsgdiv">
         <form method="" onsubmit="return false;">
             {% csrf_token  %}
-            <input id="msgtxt" name="textmsg">
+            <input id="msgtxt" name="textmsg" autocomplete="off"  >
             <button id="btn" type="submit">Отправить</button>
         </form>
     </div>
@@ -80,15 +80,15 @@
         const data = JSON.parse(event.data)
         if (document.getElementById('username').value!=data['message']['sender']){
             console.log(data)
-            addmsg(data['message']['text'], data['message']['sender'], data['message']['time'])
+            addmsg(data['message']['text'], data['message']['sender'])//, data['message']['time'])
         }
+        scrolldown()
     }
 
     btn.addEventListener("click", ()=>{
         addmsg(document.getElementById("msgtxt").value, document.getElementById('username').value)
         let arrpath = window.location.pathname.split('/')
         usernamerec = arrpath[arrpath.length-1]
-        //postMsg(document.getElementById('msgtxt').value, usernamerec)
         ws.send(JSON.stringify({'message':document.getElementById('msgtxt').value}))
         document.getElementById('msgtxt').value = ""
         scrolldown()

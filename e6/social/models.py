@@ -18,9 +18,9 @@ class Profile(models.Model):
         return f'Профиль {self.user.username}'
 
 class Room(models.Model):
-    ischat = models.BooleanField(default=True)
+    ischat = models.BooleanField(default=True, blank=False)
     members = models.ManyToManyField(User, through='ChatMessages')
-    roomname = models.CharField(max_length=50, null=True)
+    roomname = models.SlugField(max_length=50, null=True)
     def __str__(self):
         if self.ischat:
             return f'Чат между {self.members.all()}'

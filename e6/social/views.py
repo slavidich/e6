@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Profile, ChatMessages, Room, Message
-from .forms import ChangeProfile
+from .forms import ChangeProfile, CreateRoom
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 
@@ -51,12 +51,21 @@ def userlist(request):
     }
     return render(request, 'userlist.html', context)
 
-def chatlist (request):
+def roomlist (request):
 
     context = {
-        'title':'Ваши чаты'
+        'title':'Комнаты'
     }
-    return render(request, 'chats.html', context)
+    return render(request, 'rooms.html', context)
+
+def createroom(request):
+    context = {
+        'title': 'Создание комнаты',
+        'form': CreateRoom()
+    }
+    return render(request, 'createroom.html', context)
+
+
 def usertouserchat(request, username):
     chat = Room.objects.filter(ischat=True, members=request.user).filter(members=User.objects.get(username=username)).first()
     if not chat:
@@ -77,6 +86,11 @@ def usertouserchat(request, username):
     }
     return render(request, 'chat.html', context)
 
+def roomview(request, roomname):
+    context = {
+        'title': f'Комната {roomname}'
+    }
+    return render(request, 'rooms.html', context)
 
 # --- API ---
 class MessageList(generics.ListCreateAPIView):

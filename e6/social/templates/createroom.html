@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<form action="", method="post">
+    {% csrf_token%}
+
+    {% for f in form %}
+        <p><label class="form-label" for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}</p>
+        <div class="form-error">{{ f.errors }}</div>
+    {% endfor %}
+    <select class="createroomselect" multiple="" disabled="true">
+        <option value="3">admin</option>
+    </select>
+    <button type="submit">Создать</button>
+</form>
+{% endblock %}

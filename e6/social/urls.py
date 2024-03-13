@@ -9,8 +9,9 @@ urlpatterns = [
     path('accounts/profile/<slug:username>', profileview, name='profile'),
     path('accounts/profilechange', profilechange, name='profilechange'),
     path('accounts', userlist, name='accounts'),
-    path('chats', chatlist, name='chats'),
+    path('rooms', roomlist, name='rooms'),
+    path('create/room', createroom, name='createroom'),
     path('chats/<slug:username>', usertouserchat, name='usertouserchat'),
-    path('api/messages', MessageList.as_view()),
+
 
 ]

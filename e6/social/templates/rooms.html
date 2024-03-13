@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="roomlistcontainer">
+    <div class="roomlistdiv">
+        <div class="createroomdiv">
+            <a href="{% url 'createroom'%}" class="createroomhref">
+                <p>Создать комнату</p>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
