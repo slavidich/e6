@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from rest_framework.response import Response
+
 from .models import Profile, ChatMessages, Room, Message
 from .forms import ChangeProfile, CreateRoom
 from django.contrib.auth.models import User
@@ -96,4 +98,13 @@ def roomview(request, roomname):
 class MessageList(generics.ListCreateAPIView):
    queryset = Message.objects.all()
    serializer_class = MessageSerializer
+
+class UserSearchByUserName(generics.GenericAPIView):
+    serializer_class = UserSearchByUsernameSerializer
+    def get(self, request, format=None):
+        username =  request.query_params['username']
+        user = User.objects.get(username=username)
+        serializer = UserSearchByUsernameSerializer(user, many=False)
+        return Response(serializer.data)
+
 

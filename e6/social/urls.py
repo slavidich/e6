@@ -12,6 +12,6 @@ urlpatterns = [
     path('rooms', roomlist, name='rooms'),
     path('create/room', createroom, name='createroom'),
     path('chats/<slug:username>', usertouserchat, name='usertouserchat'),
-
+    path('api/searchuser', UserSearchByUserName.as_view()),
 
 ]

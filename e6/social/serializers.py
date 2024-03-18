@@ -20,4 +20,8 @@ class MessageSerializer( serializers.ModelSerializer):
         )
         return msg
 
+class UserSearchByUsernameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', ]
 
