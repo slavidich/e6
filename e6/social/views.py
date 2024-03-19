@@ -103,8 +103,12 @@ class UserSearchByUserName(generics.GenericAPIView):
     serializer_class = UserSearchByUsernameSerializer
     def get(self, request, format=None):
         username =  request.query_params['username']
-        user = User.objects.get(username=username)
-        serializer = UserSearchByUsernameSerializer(user, many=False)
-        return Response(serializer.data)
+        try:
+            user = User.objects.get(username=username)
+            serializer = UserSearchByUsernameSerializer(user, many=False)
+            return Response(serializer.data)
+        except:
+            return Response(status=418)
+
 
 

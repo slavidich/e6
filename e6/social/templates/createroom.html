@@ -19,13 +19,33 @@
 
 {% block script %}
 <script>
-    function searchuser(username){
-
+    async function searchuser(username){
+        let slct = document.querySelector('#listofusers')
+        user =  await fetch(`http://127.0.0.1:8000/api/searchuser?username=${username}`)
+            .then(response=>{
+                if (response.status==200){
+                    return response.json()
+                }
+                else {
+                    throw new Error('Пользователь не найден')
+                }
+            })
+            .then(data=>{
+                document.querySelector('#inputusername').value = ""
+                let opt = document.createElement('option')
+                opt.value = data['id']
+                opt.innerHTML = data['username']
+                slct.appendChild(opt)
+            })
+            .catch(e=> alert(e))
     }
     document.querySelector('#inputusername').addEventListener('keypress', (event)=>{
         if (event.keyCode ==13){
             event.preventDefault();
         }
+    })
+    document.querySelector('#adduserbtn').addEventListener("click", () => {
+        searchuser(document.querySelector('#inputusername').value)
     })
 
 
