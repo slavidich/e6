@@ -5,22 +5,38 @@
 <form id="form" action="", method="post">
     {% csrf_token%}
 
+    {% if form.non_field_errors %}
+        <div class="form-error">{{ form.non_field_errors }}</div>
+    {% endif %}
+
     {% for f in form %}
         <p><label class="form-label" for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}</p>
         <div class="form-error">{{ f.errors }}</div>
     {% endfor %}
     <p>username пользователя <input id="inputusername" ><button type="button" id="adduserbtn" onclick="" >Добавить</button></p>
-    <select id="listofusers" class="createroomselect" multiple="" disabled="true">
-        <option value="3">admin</option>
-    </select>
-    <button type="submit">Создать</button>
+    <p>
+        <select name="listuser" id="listofusers" class="createroomselect" multiple readonly  >
+            <option value="3">admin</option>
+        </select>
+    </p>
+
+    <button type="submit" id="button">Создать</button>
 </form>
 {% endblock %}
 
 {% block script %}
 <script>
+    let slct = document.querySelector('#listofusers')
     async function searchuser(username){
-        let slct = document.querySelector('#listofusers')
+
+        var arr = new Array()
+        for (let i=0; i<slct.length; i++){
+            arr.push(slct[i].text)
+        }
+        if (arr.includes(document.querySelector('#inputusername').value)){
+            alert('Пользователь уже добавлен')
+            return
+        }
         user =  await fetch(`http://127.0.0.1:8000/api/searchuser?username=${username}`)
             .then(response=>{
                 if (response.status==200){
@@ -47,6 +63,13 @@
     document.querySelector('#adduserbtn').addEventListener("click", () => {
         searchuser(document.querySelector('#inputusername').value)
     })
+    document.querySelector('#button').addEventListener("click", ()=>{
+        for (let i=0; i<slct.length; i++){
+            slct[i].selected=true
+            console.log(slct[i].selected)
+        }
+    })
+
 
 
 </script>

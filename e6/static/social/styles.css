@@ -1,5 +1,5 @@
 html{
-     width: 100%;
+    width: 100%;
     height: 100%;
 }
 body{
@@ -286,3 +286,13 @@ a {
     border: none;
     z-index: 1;
 }
+.createroomselect  option:checked  {
+    background:white;
+}
+.createroomselect  option:hover {
+    background:white;
+}
+.form-error {
+    color: white;
+}
+

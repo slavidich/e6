@@ -63,8 +63,13 @@ def roomlist (request):
 def createroom(request):
     context = {
         'title': 'Создание комнаты',
-        'form': CreateRoom()
     }
+    if request.method=='GET':
+        context['form']=CreateRoom()
+    elif request.method=='POST':
+        context['form']= CreateRoom(request.POST)
+        context['form'].add_error(None, 'none field erorr')
+
     return render(request, 'createroom.html', context)
 
 
