@@ -54,7 +54,6 @@ def userlist(request):
     return render(request, 'userlist.html', context)
 
 def roomlist (request):
-
     context = {
         'title':'Комнаты'
     }
@@ -67,8 +66,15 @@ def createroom(request):
     if request.method=='GET':
         context['form']=CreateRoom()
     elif request.method=='POST':
-        context['form']= CreateRoom(request.POST)
-        context['form'].add_error(None, 'none field erorr')
+        roomname = request.POST['roomname']
+        room = Room.objects.filter(roomname=roomname).first()
+        if room:
+            context['form'] = CreateRoom(request.POST)
+            context['form'].add_error(None, 'Такое название комнаты уже занято!')
+        else:
+
+            return render(request, 'createroom.html', context)
+            Room.objects.create(roomname=roomname)
 
     return render(request, 'createroom.html', context)
 
@@ -78,14 +84,7 @@ def usertouserchat(request, username):
     if not chat:
         chat = Room.objects.create(ischat=True).members.add(request.user, User.objects.get(username=username))
 
-    if request.method=='POST':
-        text =  request.POST.get('textmsg')
-        if text:
-            Message.objects.create(room=chat[0], sender=request.user, text=text)
-
     messages = Message.objects.filter(room=chat)
-
-
     context = {
         'title': f'Чат с {username}',
         'messages': messages,
@@ -97,7 +96,7 @@ def roomview(request, roomname):
     context = {
         'title': f'Комната {roomname}'
     }
-    return render(request, 'rooms.html', context)
+    return render(request, 'room.html', context)
 
 # --- API ---
 class MessageList(generics.ListCreateAPIView):
