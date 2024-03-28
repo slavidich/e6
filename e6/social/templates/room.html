@@ -2,6 +2,34 @@
 {% load static %}
 
 {% block content %}
+    <div class="roomcontainer">
+        <div class="roommsgandbutton">
+            <div class="listmsgs">
+                <p>{{room.members.all}}</p>
+                <p>{{room.admin}}</p>
+            </div>
+            <div class="sendmsdivroom">
+                <form method="" onsubmit="return false;">
+                    {% csrf_token  %}
+                    <input id="msgtxt" name="textmsg" autocomplete="off"  >
+                    <button id="btn" type="submit">Отправить</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="userlistinroom">
+            <p>Админ:</p>
+            <p>{{room.admin}}</p>
+            <br>
+            <p>Пользователи:</p>
+            {% for member in room.members.all %}
+                {% if not member == room.admin%}
+                    <p>{{member}}</p>
+                {% endif %}
+            {%endfor%}
+        </div>
+
+    </div>
 
 {% endblock %}
 

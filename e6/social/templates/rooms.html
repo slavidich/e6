@@ -9,6 +9,12 @@
                 <p>Создать комнату</p>
             </a>
         </div>
+        <div class="roomslistdiv">
+            {% for room in rooms %}
+                <p><a href="{{ room.get_absolute_url }}">{{ room.roomname }}</a></p>
+            {% endfor %}
+        </div>
+
     </div>
 </div>
 {% endblock %}

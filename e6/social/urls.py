@@ -13,7 +13,6 @@ urlpatterns = [
     path('room/<slug:roomname>', roomview, name='room'),
     path('create/room', createroom, name='createroom'),
     path('chats/<slug:username>', usertouserchat, name='usertouserchat'),
-
     path('api/searchuser', UserSearchByUserName.as_view()),
-
+    path('', index),
 ]

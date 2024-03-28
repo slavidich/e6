@@ -7,7 +7,6 @@ class ChangeProfile(forms.ModelForm):
         fields = ['avatar', 'bio']
 
 class CreateRoom(forms.ModelForm):
-
     class Meta:
         model = Room
         fields = ['roomname']

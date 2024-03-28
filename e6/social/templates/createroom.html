@@ -15,7 +15,8 @@
     {% endfor %}
     <p>username пользователя <input id="inputusername" ><button type="button" id="adduserbtn" onclick="" >Добавить</button></p>
     <p>
-        <select name="listuser" id="listofusers" class="createroomselect" multiple readonly  >
+        <select name="listuser" id="listofusers" class="createroomselect" multiple>
+            <option value="{{user.id}}">{{user.username}}</option>
         </select>
     </p>
 
@@ -58,9 +59,11 @@
         if (event.keyCode ==13){
             event.preventDefault();
         }
+
     })
     document.querySelector('#adduserbtn').addEventListener("click", () => {
         searchuser(document.querySelector('#inputusername').value)
+
     })
     document.querySelector('#button').addEventListener("click", ()=>{
         for (let i=0; i<slct.length; i++){
