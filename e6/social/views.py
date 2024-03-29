@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import Profile, ChatMessages, Room, Message
 from .forms import ChangeProfile, CreateRoom
@@ -95,9 +96,11 @@ def createroom(request):
 @login_required
 def roomview(request, roomname):
     room = Room.objects.get(roomname=roomname)
+    messages = Message.objects.filter(room=room)
     context = {
         'title': f'Комната {roomname}',
         'room': room,
+        'messages':messages,
     }
 
     return render(request, 'room.html', context)
@@ -134,5 +137,19 @@ class UserSearchByUserName(generics.GenericAPIView):
         except:
             return Response(status=418)
 
+class AddUserToRoom(APIView):
+    def post(self, request):
+        try:
+            user = User.objects.get(username=request.data['username'])
+        except:
+            return Response({'error':'Пользователь не найден'}, status=400)
+        try:
+            room = Room.objects.get(id=request.data['roomid'])
+            if user in room.members.all():
+                return Response({'error': 'Данный пользователь уже есть в комнате'}, status=400)
+            room.members.add(user)
+            return Response({'username': user.username})
+        except:
+            return Response({'error': 'Что то пошло не так...'}, 400)
 
 

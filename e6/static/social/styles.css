@@ -210,11 +210,12 @@ a {
 }
 .roommsgandbutton{
     height:100%;
+    width:30%;
     display: flex;
     flex-direction: column;
 }
 .listmsgs {
-    width: 100%;
+    width: 50%;
     height: 75%;
     border: solid 1px;
     overflow-y: auto
@@ -326,6 +327,7 @@ a {
     font-size: 18px;
 }
 .userlistinroom{
+    margin-left:5px;
     border: solid 1px black;
     width:15%;
     height: 75%;
@@ -340,4 +342,10 @@ a {
     height: 80%;
     align-items: start;
     justify-content: center;
+}
+.lismsgsroom{
+    width: 100%;
+    height: 75%;
+    border: solid 1px;
+    overflow-y: auto
 }
