@@ -55,6 +55,8 @@ class MessageConsumer(AsyncWebsocketConsumer):
     async def send_message(self, event):
 
         message = event['message']
-        if 'kickuser' in message and self.scope['user'].username == message['kickuser']:
-            pass # здесь надо удалить пользователя кста ))
+        if 'kickuser' in message:
+            if self.scope['user'].username == message['kickuser']:
+                await self.close()
+            return
         await self.send(text_data=json.dumps({'message':message}))

@@ -95,6 +95,9 @@
         }
         scrolldown()
     }
+    ws.onclose = (event) =>{
+        alert('Вас исключили из чата')
+    }
     btn.addEventListener("click", ()=>{
         addmsg(document.getElementById("msgtxt").value, document.getElementById('username').value)
         let arrpath = window.location.pathname.split('/')
