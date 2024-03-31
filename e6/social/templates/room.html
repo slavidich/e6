@@ -41,7 +41,7 @@
             <p>Пользователи:</p>
             {% for member in room.members.all %}
                 {% if not member == room.admin%}
-                    <p>{{member}}</p>
+                    <p id="{{ member.username }}">{{member}} {% if user == room.admin %}<a title="Исключить" class="delusericon" onclick="delUser('{{member.username}}')">&emsp; &#10060;</a>{% endif %}</p>
                 {% endif %}
             {%endfor%}
         </div>
@@ -103,33 +103,72 @@
         document.getElementById('msgtxt').value = ""
         scrolldown()
     });
+    {% if user == room.admin %}
+        adduserbutton.addEventListener("click", ()=>{
+            addUser()
+        })
+        async function addUser(){
+            const csrftoken = getCookie('csrftoken');
+            let msgdata = {
+                'username': document.querySelector('#adduserinput').value,
+                'roomid':{{room.id}}
+            }
 
-    adduserbutton.addEventListener("click", ()=>{
-        const csrftoken = getCookie('csrftoken');
-        let msgdata = {
-            'username': document.querySelector('#adduserinput').value,
-            'roomid':{{room.id}}
+            let resp = await fetch('http://127.0.0.1:8000/api/addusertoroom', {
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify(msgdata)
+            })
+            let data = await resp.json()
+            if (resp.status==400) {
+                alert(data['error'])
+            }
+            else if (resp.status==200) {
+                let newuser = document.createElement('p')
+                newuser.innerText=data['username']
+                newuser.id =data['username']
+                let icon = document.createElement('a')
+                icon.title='Исключить'
+                icon.className='delusericon'
+                icon.addEventListener("click", ()=>delUser(`${data["username"]}`))
+                icon.innerText='  ❌'
+                document.querySelector('.userlistinroom').appendChild(newuser)
+                newuser.appendChild(icon)
+            }
+            else{
+                alert('Ошибка сервера')
+            }
         }
 
-        let prom =  fetch('http://127.0.0.1:8000/api/addusertoroom', {
-            method:'POST',
-            headers:{
-                'Content-Type': 'application/json;charset=utf-8',
-                'X-CSRFToken': csrftoken
-            },
-            body: JSON.stringify(msgdata)
-        }).then(response=>{
-            if (response.status==400){
-                throw new Error(response.json())
+        function delUser(username){
+            const csrftoken = getCookie('csrftoken');
+            let msgdata = {
+                'username': username,
+                'roomid':{{room.id}}
             }
-            return response.json()
-        }).then(data=>{
-            console.log(data)
-        }).catch(error=>{
-            alert(error)
-        })
-        console.log(prom) //ВОТ ЗДЕСЬ ВСЕ ПЕРЕДЕЛЫВАТЬ НАДО!!!!
-    })
+            fetch('http://127.0.0.1:8000/api/deluserfromroom', {
+                method:'DELETE',
+                headers:{
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify(msgdata)
+            }).then(response => {
+                if (response.status==500){
+                    alert('Ошибка сервера')
+                }
+                else if (response.status==403){
+                    alert('У Вас недостаточно прав')
+                }
+                else if (response.status=200){
+                    document.querySelector(`#${username}`).remove()
+                }
+            })
+        }
+    {% endif %}
 
 
 

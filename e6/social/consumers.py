@@ -28,6 +28,7 @@ class MessageConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
     async def receive(self, text_data):
+        # добавиь проверку что чел в чате вообще?
         text_data_json = json.loads(text_data)
         text = text_data_json['message']
         sender = self.scope['user']

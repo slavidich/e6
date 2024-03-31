@@ -3,12 +3,10 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from .models import Profile, ChatMessages, Room, Message
 from .forms import ChangeProfile, CreateRoom
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
-
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework import generics
@@ -102,7 +100,8 @@ def roomview(request, roomname):
         'room': room,
         'messages':messages,
     }
-
+    if request.user not in room.members.all():
+        return redirect('rooms')
     return render(request, 'room.html', context)
 
 @login_required
@@ -152,4 +151,15 @@ class AddUserToRoom(APIView):
         except:
             return Response({'error': 'Что то пошло не так...'}, 400)
 
+class DelUserFromRoom(APIView):
+    def delete(self, request):
+        try:
+            user = User.objects.get(username=request.data['username'])
+            room = Room.objects.get(id=request.data['roomid'])
+        except:
+            return Response(status=500)
+        if not request.user==room.admin:
+            return Response(status=403)
+        room.members.remove(user)
+        return Response( status=200)
 

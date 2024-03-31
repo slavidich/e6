@@ -349,3 +349,9 @@ a {
     border: solid 1px;
     overflow-y: auto
 }
+.delusericon{
+    text-decoration: none;
+}
+.delusericon:hover{
+    cursor: pointer;
+}
