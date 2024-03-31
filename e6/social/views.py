@@ -11,7 +11,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework import generics
 from .serializers import *
-
+from .consumers import MessageConsumer
 # Create your views here.
 @login_required
 def index(request):

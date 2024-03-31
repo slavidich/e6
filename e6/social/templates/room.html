@@ -167,6 +167,7 @@
                     document.querySelector(`#${username}`).remove()
                 }
             })
+            ws.send(JSON.stringify({'deluser':username}))
         }
     {% endif %}
 
