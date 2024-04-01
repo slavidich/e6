@@ -17,6 +17,7 @@ urlpatterns = [
     path('api/searchuser', UserSearchByUserName.as_view()),
     path('api/addusertoroom', AddUserToRoom.as_view()),
     path('api/deluserfromroom', DelUserFromRoom.as_view()),
+    path('api/exituserfromroom', ExutUserFromRoom.as_view()),
 
     path('', index),
 ]

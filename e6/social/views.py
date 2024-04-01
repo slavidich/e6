@@ -5,13 +5,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Profile, ChatMessages, Room, Message
 from .forms import ChangeProfile, CreateRoom
-from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.shortcuts import render
-from rest_framework import viewsets
 from rest_framework import generics
 from .serializers import *
-from .consumers import MessageConsumer
+from django.core.exceptions import PermissionDenied
+
 # Create your views here.
 @login_required
 def index(request):
@@ -88,7 +87,6 @@ def createroom(request):
             room.save()
 
             return redirect('room', roomname=room.roomname)
-
     return render(request, 'createroom.html', context)
 
 @login_required
@@ -101,15 +99,15 @@ def roomview(request, roomname):
         'messages':messages,
     }
     if request.user not in room.members.all():
-        return redirect('rooms')
+        raise PermissionDenied()
     return render(request, 'room.html', context)
 
 @login_required
 def usertouserchat(request, username):
     chat = Room.objects.filter(ischat=True, members=request.user).filter(members=User.objects.get(username=username)).first()
     if not chat:
-        chat = Room.objects.create(ischat=True).members.add(request.user, User.objects.get(username=username))
-
+        chat = Room.objects.create(ischat=True)
+        chat.members.add(request.user, User.objects.get(username=username))
     messages = Message.objects.filter(room=chat)
     context = {
         'title': f'Чат с {username}',
@@ -117,8 +115,6 @@ def usertouserchat(request, username):
         'chat_id': chat.id,
     }
     return render(request, 'chat.html', context)
-
-
 
 # --- API ---
 class MessageList(generics.ListCreateAPIView):
@@ -162,4 +158,15 @@ class DelUserFromRoom(APIView):
             return Response(status=403)
         room.members.remove(user)
         return Response( status=200)
+
+class ExutUserFromRoom(APIView):
+    def delete(self, request):
+        try:
+            user = self.request.user
+            room = Room.objects.get(id=request.data['roomid'])
+        except:
+            return Response(status=500)
+        if room.admin!=user and user in room.members.all():
+            room.members.remove(user)
+            return Response({'user':123}, status=200)
 

@@ -44,6 +44,10 @@
                     <p id="{{ member.username }}">{{member}} {% if user == room.admin %}<a title="Исключить" class="delusericon" onclick="delUser('{{member.username}}')">&emsp; &#10060;</a>{% endif %}</p>
                 {% endif %}
             {%endfor%}
+            {% if user != room.admin %}
+                <br>
+                <button id="exitroombtn" class="exitroombtn">Выйти из комнаты</button>
+            {%endif %}
         </div>
 
     </div>
@@ -95,8 +99,13 @@
         }
         scrolldown()
     }
-    ws.onclose = (event) =>{
-        alert('Вас исключили из чата')
+    ws.onclose = ()=>{
+        setTimeout(()=>{
+            alert('Вы были исключены из чата')
+        }, 1000)
+        setTimeout(()=>{
+            window.location.href='../rooms'
+        }, 1000)
     }
     btn.addEventListener("click", ()=>{
         addmsg(document.getElementById("msgtxt").value, document.getElementById('username').value)
@@ -172,7 +181,28 @@
             })
             ws.send(JSON.stringify({'deluser':username}))
         }
+    {% else %}
+        exitroombtn.addEventListener("click", ()=>{
+            const csrftoken = getCookie('csrftoken');
+            let msgdata = {
+                'roomid':{{room.id}}
+            }
+            fetch('http://127.0.0.1:8000/api/exituserfromroom', {
+                method:'DELETE',
+                headers:{
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify(msgdata)
+            }).then(response=>{
+                if (response.status==200)
+                {
+                    window.location.href='../rooms'
+                }
+            })
+        })
     {% endif %}
+
 
 
 

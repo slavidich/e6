@@ -331,6 +331,7 @@ a {
     border: solid 1px black;
     width:15%;
     height: 75%;
+    overflow-y: auto;
 }
 .userlistinroom p{
     margin-top:1px;
@@ -354,4 +355,7 @@ a {
 }
 .delusericon:hover{
     cursor: pointer;
+}
+.exitroombtn{
+    margin-left:5px;
 }

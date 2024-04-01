@@ -53,7 +53,6 @@ class MessageConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(self.group_name, event)
 
     async def send_message(self, event):
-
         message = event['message']
         if 'kickuser' in message:
             if self.scope['user'].username == message['kickuser']:
