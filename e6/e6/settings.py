@@ -48,9 +48,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
 
     'rest_framework',
-
-
-
 ]
 
 MIDDLEWARE = [
@@ -166,3 +163,5 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_SIGNUP_REDIRECT_URL = "/rooms"
+LOGIN_REDIRECT_URL = "/rooms"
