@@ -24,7 +24,12 @@
                     {% endif %}
                 </div>
                 <div class="userdivname">
-                    <a href="{% url 'profile' userprofile.username%}">{{ userprofile.username }}</a>
+                    {% if userprofile.first_name %}
+                        <a href="{% url 'profile' userprofile.username%}">{{ userprofile.username }} ({{ userprofile.first_name }})</a>
+                    {% else %}
+                        <a href="{% url 'profile' userprofile.username%}">{{ userprofile.username }}</a>
+                    {% endif %}
+
                 </div>
             </div>
             {% if user != userprofile %}

@@ -4,7 +4,12 @@
 <div class="profilecontainer">
     <div class="profilediv">
         <div class="usernamediv">
-            <p>{{profileuser.username}}</p>
+            {% if profileuser.first_name%}
+                <p>{{profileuser.username}} ({{profileuser.first_name}})</p>
+            {% else %}
+                <p>{{profileuser.username}}</p>
+            {% endif %}
+
         </div>
         <div class="useravatar">
             {%if profileuser.profile.avatar%}
@@ -25,6 +30,7 @@
         {% else %}
             <a class="buttonprofile" href="{% url 'usertouserchat' profileuser.username%}">Написать</a>
         {% endif %}
+
     </div>
 </div>
 

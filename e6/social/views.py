@@ -27,14 +27,12 @@ def profilechange(request):
     if not Profile.objects.filter(user=user):
         Profile.objects.create(user=user)
     if request.method == 'POST':
-        form = ChangeProfile(request.POST, request.FILES, instance=user.profile)
+        form = ChangeProfile(request.POST, request.FILES)
         if form.is_valid():
-            profile = form.save(commit=False)
-            form.save()
+            form.save(user)
             return redirect('profile', user.username)
     else:
-
-        form = ChangeProfile(instance=user.profile)
+        form = ChangeProfile(initial={'firstname':user.first_name, 'avatar':user.profile.avatar, 'bio':user.profile.bio})
     context = {
         'title': 'Редактирование профиля',
         'form':form,
@@ -143,7 +141,7 @@ class AddUserToRoom(APIView):
             if user in room.members.all():
                 return Response({'error': 'Данный пользователь уже есть в комнате'}, status=400)
             room.members.add(user)
-            return Response({'username': user.username})
+            return Response({'username': user.username, 'first_name':user.first_name})
         except:
             return Response({'error': 'Что то пошло не так...'}, 400)
 

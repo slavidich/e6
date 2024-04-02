@@ -13,8 +13,8 @@
     </div>
     <div class="navright">
         {% if user.is_authenticated  %}
-            <p>Привет, <a href="{%url 'profile' user.username%}">{{user}}</a></p>
-            <input hidden="hidden" value="{{ user }}" id="username">
+            <p>Привет, <a id="username" href="{%url 'profile' user.username%}">{{user.username}}</a></p>
+            <input type="hidden" id="firstname" value={{user.first_name}}>
         {% else %}
             <p><a href="{% url 'account_login'%}">Войти</a></p>
         {% endif %}

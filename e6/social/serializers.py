@@ -15,7 +15,7 @@ class MessageSerializer( serializers.ModelSerializer):
 
         msg = Message.objects.create(
             text = validated_data['text'],
-            sender = self.context['request'].user,
+            sender = self.context['request'].user.username,
             room=room,
         )
         return msg
@@ -23,5 +23,5 @@ class MessageSerializer( serializers.ModelSerializer):
 class UserSearchByUsernameSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', ]
+        fields = ['id', 'username']
 

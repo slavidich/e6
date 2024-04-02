@@ -47,7 +47,8 @@ class MessageConsumer(AsyncWebsocketConsumer):
             'message': {
                 'text': text,
                 'sender': sender.username,
-                'time': message.time.isoformat()
+                'time': message.time.isoformat(),
+                'sendername':sender.first_name,
             }
         }
         await self.channel_layer.group_send(self.group_name, event)

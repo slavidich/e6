@@ -8,7 +8,7 @@
                 {% for message in messages %}
                     <div class="divmessage">
                         <div class="messagetext">
-                            <p><b>{{message.sender}}</b>: {{message.text}}</p>
+                            <p><b>{{message.sender}}{% if message.sender.first_name%} ({{message.sender.first_name}}){% endif %}</b>: {{message.text}}</p>
                         </div>
                         <div class="messagetime">
                             <p>{{message.time|date:"d.m.y H:i" }}</p>
@@ -35,13 +35,19 @@
 
 
             <p>Админ:</p>
-            <p>{{room.admin}}</p>
+            <p>{{room.admin}}{%if room.admin.first_name%} ({{room.admin.first_name}}) {% endif %}</p>
             <br>
 
             <p>Пользователи:</p>
             {% for member in room.members.all %}
                 {% if not member == room.admin%}
-                    <p id="{{ member.username }}">{{member}} {% if user == room.admin %}<a title="Исключить" class="delusericon" onclick="delUser('{{member.username}}')">&emsp; &#10060;</a>{% endif %}</p>
+                    <p id="{{ member.username }}">{{member}}
+                        {%if member.first_name%}
+                            ({{member.first_name}})
+                        {% endif %}
+                        {% if user == room.admin %}
+                            <a title="Исключить" class="delusericon" onclick="delUser('{{member.username}}')">&emsp; &#10060;</a>
+                        {% endif %}</p>
                 {% endif %}
             {%endfor%}
             {% if user != room.admin %}
@@ -56,15 +62,20 @@
 
 {% block script %}
 <script>
-    function addmsg(text, sender, date=new Date()){
+    function addmsg(text, sender, sendername=null, date=new Date()){
             let time = formatDate(date)
             let msgdiv =  document.createElement('div')
             msgdiv.classList.add('divmessage')
-            msgdiv.innerHTML = `<div class="messagetext"><p><b>${sender}</b>: ${text}</p></div>
+            if (sendername){
+                msgdiv.innerHTML = `<div class="messagetext"><p><b>${sender} (${sendername})</b>: ${text}</p></div>
                                 <div class="messagetime"><p>${time}</p></div></div>`
+            } else{
+                msgdiv.innerHTML = `<div class="messagetext"><p><b>${sender}</b>: ${text}</p></div>
+                                <div class="messagetime"><p>${time}</p></div></div>`
+            }
             let listmsgs = document.querySelector('.lismsgsroom')
             listmsgs.append(msgdiv)
-        }
+    }
     function scrolldown(){
         let listmsg = document.querySelector('.lismsgsroom')
         listmsg.scrollTo(0, listmsg.scrollHeight)
@@ -93,13 +104,17 @@
     ws = new WebSocket('ws://127.0.0.1:8000/ws/chat/{{room.id}}/')
     ws.onmessage = (event) => {
         const data = JSON.parse(event.data)
-        if (document.getElementById('username').value!=data['message']['sender']){
-            console.log(data)
-            addmsg(data['message']['text'], data['message']['sender'])//, data['message']['time'])
+        if (document.getElementById('username').innerText!=data['message']['sender']){
+            if (data['message']['sendername']){
+                addmsg(data['message']['text'], data['message']['sender'], sendername=data['message']['sendername'])
+            } else{
+                addmsg(data['message']['text'], data['message']['sender'])//, data['message']['time'])
+            }
         }
         scrolldown()
     }
     ws.onclose = ()=>{
+        ws.close()
         setTimeout(()=>{
             alert('Вы были исключены из чата')
         }, 1000)
@@ -108,7 +123,7 @@
         }, 1000)
     }
     btn.addEventListener("click", ()=>{
-        addmsg(document.getElementById("msgtxt").value, document.getElementById('username').value)
+        addmsg(document.getElementById("msgtxt").value, document.getElementById('username').innerText, document.getElementById('firstname').value)
         let arrpath = window.location.pathname.split('/')
         usernamerec = arrpath[arrpath.length-1]
         ws.send(JSON.stringify({'message':document.getElementById('msgtxt').value}))
@@ -140,7 +155,11 @@
             }
             else if (resp.status==200) {
                 let newuser = document.createElement('p')
-                newuser.innerText=data['username']
+                if (data['first_name']){
+                    newuser.innerText=`${data['username']} (${data['first_name']})`
+                } else{
+                    newuser.innerText=data['username']
+                }
                 newuser.id =data['username']
                 let icon = document.createElement('a')
                 icon.title='Исключить'
