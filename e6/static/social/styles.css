@@ -38,6 +38,13 @@ a {
 }
 .navright{
     margin-right:30px;
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.navright a{
+    font-size: 20px;
+
 }
 .defaultavatarprofile{
     width: 250px;
