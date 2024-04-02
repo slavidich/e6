@@ -13,14 +13,10 @@
     </div>
     <div class="navright">
         {% if user.is_authenticated  %}
-<<<<<<< HEAD
             <p>Привет, <a id="username" href="{%url 'profile' user.username%}">{{user.username}}</a></p>
             <input type="hidden" id="firstname" value={{user.first_name}}>
-=======
-            <p>Привет, <a href="{%url 'profile' user.username%}">{{user}}  </a></p>
-            <input hidden="hidden" value="{{ user }}" id="username">
             <p>&emsp;<a href="{% url 'account_logout' %}">Выйти</a></p>
->>>>>>> f928aee538bbf311ca835d362f844be949ec240e
+
         {% else %}
             <p><a href="{% url 'account_login'%}">Войти</a></p>
         {% endif %}
